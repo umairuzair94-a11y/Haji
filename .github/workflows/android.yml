@@ -26,9 +26,9 @@ jobs:
         sudo apt-get install -y gradle
         gradle wrapper
 
-    - name: Update Gradle Version
+  - name: Update Gradle Version
       run: |
-        sed -i 's|distributionUrl=.*|distributionUrl=https\\://services.gradle.org/distributions/gradle-8.6-bin.zip|' gradle/wrapper/gradle-wrapper.properties
+        sed -i 's|distributionUrl=.*|distributionUrl=https\\://services.gradle.org/distributions/gradle-9.3.1-bin.zip|' gradle/wrapper/gradle-wrapper.properties
 
     - name: Grant Execute Permission for Gradlew
       run: chmod +x gradlew
