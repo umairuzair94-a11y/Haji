@@ -21,10 +21,10 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
-    - name: Fix Gradle Wrapper JAR
+    - name: Regenerate Gradle Wrapper
       run: |
-        curl -L https://github.com/gradle/gradle/raw/v8.0.0/gradle/wrapper/gradle-wrapper.jar \
-        -o gradle/wrapper/gradle-wrapper.jar
+        sudo apt-get install -y gradle
+        gradle wrapper
 
     - name: Grant Execute Permission for Gradlew
       run: chmod +x gradlew
