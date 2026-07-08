@@ -30,6 +30,10 @@ jobs:
         run: |
           sed -i 's|distributionUrl=.*|distributionUrl=https\://services.gradle.org/distributions/gradle-9.3.1-bin.zip|' gradle/wrapper/gradle-wrapper.properties
 
+      - name: Create debug keystore
+        run: |
+          keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -dname "CN=Android Debug,O=Android,C=US"
+
       - name: Grant Execute Permission for Gradlew
         run: chmod +x gradlew
 
