@@ -1,0 +1,18 @@
+# Set default behavior to automatic text/binary detection.
+* text=auto
+
+# Ensure shell scripts always use LF line endings on all systems
+gradlew text eol=lf
+
+# Ensure batch files always use CRLF line endings
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Treat binary/compressed files as binary (do not normalize line endings)
+*.jar binary
+*.png binary
+*.webp binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.keystore binary

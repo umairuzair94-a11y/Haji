@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    
+    <!-- Outer Glow Circle -->
+    <path
+        android:fillColor="#1500FFCC"
+        android:pathData="M54,24c16.57,0 30,13.43 30,30S70.57,84 54,84 24,70.57 24,54 37.43,24 54,24z" />
+        
+    <!-- Main Coin Body -->
+    <path
+        android:fillColor="#FFD700"
+        android:pathData="M54,29c13.81,0 25,11.19 25,25S67.81,79 54,79 29,67.81 29,54 40.19,29 54,29z" />
+        
+    <!-- Inner Coin Rim -->
+    <path
+        android:fillColor="#FFC107"
+        android:pathData="M54,32c12.15,0 22,9.85 22,22S66.15,76 54,76 32,66.15 32,54 41.85,32 54,32z" />
+        
+    <!-- Star Deco Top Left -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M40,40l1,2l2,1l-2,1l-1,2l-1,-2l-2,-1l2,-1z" />
+
+    <!-- Star Deco Bottom Right -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M68,64l1,2l2,1l-2,1l-1,2l-1,-2l-2,-1l2,-1z" />
+
+    <!-- Detailed PKR Rupee Symbol '₨' centered perfectly -->
+    <!-- Draw "Rs" or "₨" using path segments -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M43,47h7c1.66,0 3,1.34 3,3s-1.34,3 -3,3h-7v6h-3V44h10c1.66,0 3,1.34 3,3s-1.34,3 -3,3z M43,50h7c0.55,0 1,-0.45 1,-1s-0.45,-1 -1,-1h-7z M43,53h7c0.55,0 1,-0.45 1,-1s-0.45,-1 -1,-1h-7z" />
+        
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M58,54c0,-2.2 1.8,-4 4,-4s4,1.8 4,4v5h-3v-5c0,-0.55 -0.45,-1 -1,-1s-1,0.45 -1,1v5h-3v-5z" />
+
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,61h14v2H54z" />
+</vector>

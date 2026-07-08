@@ -1,0 +1,6 @@
+{
+  "name": "PKR Expense Tracker",
+  "description": "A premium, offline-first personal expense tracker designed for Pakistani Rupees (PKR), featuring custom categories, interactive reports, search/filters, and smooth visualizations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
