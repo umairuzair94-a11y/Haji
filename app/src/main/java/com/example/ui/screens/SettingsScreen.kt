@@ -39,15 +39,20 @@ fun SettingsScreen(
     val isDarkMode by viewModel.isDarkMode.collectAsState()
     val monthlyBudget by viewModel.monthlyBudget.collectAsState()
     val expenses by viewModel.allExpenses.collectAsState()
+    val userName by viewModel.userName.collectAsState()
 
     var budgetInput by remember { mutableStateOf(monthlyBudget.toString()) }
+    var nameInput by remember { mutableStateOf(userName) }
     var showRestoreDialog by remember { mutableStateOf(false) }
     var restoreJsonText by remember { mutableStateOf("") }
-    
     var showClearDataDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(monthlyBudget) {
         budgetInput = monthlyBudget.toString()
+    }
+
+    LaunchedEffect(userName) {
+        nameInput = userName
     }
 
     Scaffold(
@@ -80,6 +85,54 @@ fun SettingsScreen(
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+
+            // ✅ NEW Section: Profile Name
+            SettingsSectionHeader("YOUR PROFILE")
+
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Text(
+                        "Your Name",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        "This name appears on your home screen",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.outline
+                    )
+                    OutlinedTextField(
+                        value = nameInput,
+                        onValueChange = { nameInput = it },
+                        singleLine = true,
+                        placeholder = { Text("Enter your name") },
+                        trailingIcon = {
+                            Button(
+                                onClick = {
+                                    if (nameInput.isNotBlank()) {
+                                        viewModel.setUserName(nameInput.trim())
+                                        Toast.makeText(context, "Name updated!", Toast.LENGTH_SHORT).show()
+                                    }
+                                },
+                                shape = RoundedCornerShape(8.dp),
+                                modifier = Modifier.padding(end = 4.dp)
+                            ) {
+                                Text("Save")
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(10.dp)
+                    )
+                }
+            }
+
             // Section 1: Budget Settings
             SettingsSectionHeader("FINANCIAL PREFERENCES")
 
@@ -97,7 +150,6 @@ fun SettingsScreen(
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
-                    
                     OutlinedTextField(
                         value = budgetInput,
                         onValueChange = { input ->
@@ -128,14 +180,12 @@ fun SettingsScreen(
 
                     Spacer(modifier = Modifier.height(4.dp))
 
-                    // Currency Selector
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text("Active Currency", style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
-                        
                         var expanded by remember { mutableStateOf(false) }
                         Box {
                             Button(onClick = { expanded = true }) {
@@ -158,7 +208,7 @@ fun SettingsScreen(
                 }
             }
 
-            // Section 2: App Styling (Dark Mode)
+            // Section 2: App Theme
             SettingsSectionHeader("APP THEME")
 
             Card(
@@ -185,7 +235,7 @@ fun SettingsScreen(
                 }
             }
 
-            // Section 3: Data & Storage
+            // Section 3: Data Backup
             SettingsSectionHeader("DATA BACKUP & RESTORE")
 
             Card(
@@ -207,21 +257,17 @@ fun SettingsScreen(
                             }
                         }
                     )
-                    
                     Divider(color = MaterialTheme.colorScheme.surfaceVariant)
-
                     SettingsRowItem(
                         title = "Restore Data (Paste JSON)",
                         subtitle = "Import expenses from pasted backup code",
                         icon = Icons.Default.Restore,
-                        onClick = {
-                            showRestoreDialog = true
-                        }
+                        onClick = { showRestoreDialog = true }
                     )
                 }
             }
 
-            // Section 4: Export Transactions (Excel, PDF)
+            // Section 4: Export
             SettingsSectionHeader("EXPORT STATEMENTS")
 
             Card(
@@ -242,9 +288,7 @@ fun SettingsScreen(
                             }
                         }
                     )
-
                     Divider(color = MaterialTheme.colorScheme.surfaceVariant)
-
                     SettingsRowItem(
                         title = "Export PDF Statement",
                         subtitle = "Share beautifully-formatted transaction summary text",
@@ -260,7 +304,7 @@ fun SettingsScreen(
                 }
             }
 
-            // Section 5: Reset
+            // Section 5: Danger Zone
             SettingsSectionHeader("DANGER ZONE")
 
             Card(
@@ -273,9 +317,7 @@ fun SettingsScreen(
                     subtitle = "Irreversibly delete all recorded expenses",
                     icon = Icons.Default.DeleteForever,
                     color = MaterialTheme.colorScheme.error,
-                    onClick = {
-                        showClearDataDialog = true
-                    }
+                    onClick = { showClearDataDialog = true }
                 )
             }
 
@@ -318,19 +360,15 @@ fun SettingsScreen(
                         }
                     },
                     enabled = restoreJsonText.isNotBlank()
-                ) {
-                    Text("Restore")
-                }
+                ) { Text("Restore") }
             },
             dismissButton = {
-                TextButton(onClick = { showRestoreDialog = false }) {
-                    Text("Cancel")
-                }
+                TextButton(onClick = { showRestoreDialog = false }) { Text("Cancel") }
             }
         )
     }
 
-    // Clear confirmation
+    // Clear Dialog
     if (showClearDataDialog) {
         AlertDialog(
             onDismissRequest = { showClearDataDialog = false },
@@ -344,14 +382,10 @@ fun SettingsScreen(
                         showClearDataDialog = false
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
-                ) {
-                    Text("Delete All")
-                }
+                ) { Text("Delete All") }
             },
             dismissButton = {
-                TextButton(onClick = { showClearDataDialog = false }) {
-                    Text("Cancel")
-                }
+                TextButton(onClick = { showClearDataDialog = false }) { Text("Cancel") }
             }
         )
     }
@@ -385,81 +419,61 @@ fun SettingsRowItem(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            tint = color,
-            modifier = Modifier.size(24.dp)
-        )
-        
+        Icon(imageVector = icon, contentDescription = null, tint = color, modifier = Modifier.size(24.dp))
         Column(modifier = Modifier.weight(1f)) {
             Text(title, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold, color = color)
             Text(subtitle, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.outline)
         }
-        
         Icon(Icons.Default.ChevronRight, contentDescription = null, tint = MaterialTheme.colorScheme.outline)
     }
 }
 
-// Share Statements helper functions
 fun exportToExcelCSV(context: Context, expenses: List<com.example.data.ExpenseWithCategory>, currency: String) {
     try {
         val symbol = if (currency == "PKR") "PKR" else currency
         val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
-        
         val csv = StringBuilder()
         csv.append("Transaction ID,Amount ($symbol),Category,Date & Time,Notes\n")
-        
         expenses.forEach { exp ->
             val dateStr = sdf.format(Date(exp.date))
             val safeNotes = exp.notes.replace("\"", "\"\"")
             csv.append("${exp.expenseId},${exp.amount},\"${exp.categoryName}\",\"$dateStr\",\"$safeNotes\"\n")
         }
-        
         val intent = Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
             putExtra(Intent.EXTRA_SUBJECT, "Personal Expense Tracker Statement (Excel CSV)")
             putExtra(Intent.EXTRA_TEXT, csv.toString())
         }
         context.startActivity(Intent.createChooser(intent, "Share Statement CSV"))
-    } catch (e: Exception) {
-        e.printStackTrace()
-    }
+    } catch (e: Exception) { e.printStackTrace() }
 }
 
 fun exportToPDFText(context: Context, expenses: List<com.example.data.ExpenseWithCategory>, currency: String) {
     try {
         val symbol = if (currency == "PKR") "₨" else currency
         val sdf = SimpleDateFormat("dd MMMM, yyyy - hh:mm a", Locale.getDefault())
-        
         val report = StringBuilder()
         report.append("=========================================\n")
         report.append("       PERSONAL EXPENSE STATEMENT\n")
         report.append("=========================================\n")
         report.append("Generated on: ${SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault()).format(Date())}\n")
-        report.append("Currency: $symbol (Pakistani Rupees)\n")
+        report.append("Currency: $symbol\n")
         report.append("Total Expenses Count: ${expenses.size}\n")
         report.append("Total Expense Sum: $symbol ${String.format("%,.2f", expenses.sumOf { it.amount })}\n")
         report.append("-----------------------------------------\n\n")
-        
         expenses.forEachIndexed { index, exp ->
             val dateStr = sdf.format(Date(exp.date))
             report.append("${index + 1}. CATEGORY: ${exp.categoryName}\n")
             report.append("   AMOUNT: $symbol ${String.format("%,.2f", exp.amount)}\n")
             report.append("   DATE: $dateStr\n")
-            if (exp.notes.isNotEmpty()) {
-                report.append("   NOTES: ${exp.notes}\n")
-            }
+            if (exp.notes.isNotEmpty()) report.append("   NOTES: ${exp.notes}\n")
             report.append("-----------------------------------------\n")
         }
-        
         val intent = Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
             putExtra(Intent.EXTRA_SUBJECT, "Personal Expense Tracker PDF Statement Summary")
             putExtra(Intent.EXTRA_TEXT, report.toString())
         }
         context.startActivity(Intent.createChooser(intent, "Share Statement PDF Summary"))
-    } catch (e: Exception) {
-        e.printStackTrace()
-    }
+    } catch (e: Exception) { e.printStackTrace() }
 }
