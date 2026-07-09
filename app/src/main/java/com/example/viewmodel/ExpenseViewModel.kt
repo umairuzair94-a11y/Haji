@@ -20,15 +20,19 @@ class ExpenseViewModel(application: Application) : AndroidViewModel(application)
 
     // Settings & Preferences
     private val prefs = context.getSharedPreferences("expense_tracker_prefs", Context.MODE_PRIVATE)
-    
+
     private val _currency = MutableStateFlow(prefs.getString("currency", "PKR") ?: "PKR")
     val currency: StateFlow<String> = _currency.asStateFlow()
 
-    private val _isDarkMode = MutableStateFlow(prefs.getBoolean("dark_mode", true)) // Default to Dark Mode for premium feel
+    private val _isDarkMode = MutableStateFlow(prefs.getBoolean("dark_mode", true))
     val isDarkMode: StateFlow<Boolean> = _isDarkMode.asStateFlow()
 
     private val _monthlyBudget = MutableStateFlow(prefs.getFloat("monthly_budget", 50000f).toDouble())
     val monthlyBudget: StateFlow<Double> = _monthlyBudget.asStateFlow()
+
+    // ✅ NEW: User Name
+    private val _userName = MutableStateFlow(prefs.getString("user_name", "My Name") ?: "My Name")
+    val userName: StateFlow<String> = _userName.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -50,6 +54,12 @@ class ExpenseViewModel(application: Application) : AndroidViewModel(application)
     fun setMonthlyBudget(budget: Double) {
         _monthlyBudget.value = budget
         prefs.edit().putFloat("monthly_budget", budget.toFloat()).apply()
+    }
+
+    // ✅ NEW: Set User Name
+    fun setUserName(name: String) {
+        _userName.value = name
+        prefs.edit().putString("user_name", name).apply()
     }
 
     // Expense Operations
