@@ -21,11 +21,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
+import coil.compose.AsyncImage
 import com.example.data.ExpenseWithCategory
 import com.example.ui.CategoryIconHelper
 import com.example.viewmodel.ExpenseViewModel
@@ -107,96 +111,42 @@ fun DashboardScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column {
-                        Text(
-                            text = "ASSALAM-O-ALAIKUM",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = Color(0xFF90909A),
-                            fontWeight = FontWeight.Bold,
-                            letterSpacing = 1.sp
-                        )
-                        Text(
-                            text = userName,
-                            style = MaterialTheme.typography.titleLarge,
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold
-                        )
+                        Text(text = "ASSALAM-O-ALAIKUM", style = MaterialTheme.typography.labelSmall, color = Color(0xFF90909A), fontWeight = FontWeight.Bold, letterSpacing = 1.sp)
+                        Text(text = userName, style = MaterialTheme.typography.titleLarge, color = Color.White, fontWeight = FontWeight.Bold)
                     }
                     Box(
-                        modifier = Modifier
-                            .size(40.dp)
-                            .background(Color(0xFF3F4759), shape = CircleShape)
-                            .border(1.dp, Color(0xFF545F71), shape = CircleShape),
+                        modifier = Modifier.size(40.dp).background(Color(0xFF3F4759), shape = CircleShape).border(1.dp, Color(0xFF545F71), shape = CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(
-                            text = userInitials,
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 14.sp
-                        )
+                        Text(text = userInitials, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 14.sp)
                     }
                 }
             }
         },
         bottomBar = {
-            Surface(
-                color = Color(0xFF1D1E25),
-                border = BorderStroke(1.dp, Color(0x333F4759)),
-                modifier = Modifier.windowInsetsPadding(WindowInsets.navigationBars)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.clickable { }.padding(8.dp)
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .background(Color(0xFF3F4759), shape = RoundedCornerShape(12.dp))
-                                .padding(horizontal = 16.dp, vertical = 4.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
+            Surface(color = Color(0xFF1D1E25), border = BorderStroke(1.dp, Color(0x333F4759)), modifier = Modifier.windowInsetsPadding(WindowInsets.navigationBars)) {
+                Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.clickable { }.padding(8.dp)) {
+                        Box(modifier = Modifier.background(Color(0xFF3F4759), shape = RoundedCornerShape(12.dp)).padding(horizontal = 16.dp, vertical = 4.dp), contentAlignment = Alignment.Center) {
                             Icon(Icons.Default.Home, contentDescription = "Home", tint = Color(0xFFD0E4FF), modifier = Modifier.size(20.dp))
                         }
                         Spacer(modifier = Modifier.height(4.dp))
                         Text("Home", style = MaterialTheme.typography.labelSmall, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 10.sp)
                     }
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.clickable { onNavigateToReports() }.padding(8.dp)
-                    ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.clickable { onNavigateToReports() }.padding(8.dp)) {
                         Icon(Icons.Default.ShowChart, contentDescription = "Reports", tint = Color(0xFF90909A), modifier = Modifier.size(20.dp))
                         Spacer(modifier = Modifier.height(4.dp))
                         Text("Reports", style = MaterialTheme.typography.labelSmall, color = Color(0xFF90909A), fontWeight = FontWeight.Bold, fontSize = 10.sp)
                     }
-                    Box(
-                        modifier = Modifier
-                            .offset(y = (-12).dp)
-                            .size(56.dp)
-                            .background(Color(0xFFD0E4FF), shape = RoundedCornerShape(16.dp))
-                            .clickable { onNavigateToAddExpense() }
-                            .testTag("add_expense_fab_navbar"),
-                        contentAlignment = Alignment.Center
-                    ) {
+                    Box(modifier = Modifier.offset(y = (-12).dp).size(56.dp).background(Color(0xFFD0E4FF), shape = RoundedCornerShape(16.dp)).clickable { onNavigateToAddExpense() }.testTag("add_expense_fab_navbar"), contentAlignment = Alignment.Center) {
                         Icon(Icons.Default.Add, contentDescription = "Add Expense", tint = Color(0xFF00315C), modifier = Modifier.size(28.dp))
                     }
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.clickable { onNavigateToCategories() }.padding(8.dp)
-                    ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.clickable { onNavigateToCategories() }.padding(8.dp)) {
                         Icon(Icons.Default.Category, contentDescription = "Categories", tint = Color(0xFF90909A), modifier = Modifier.size(20.dp))
                         Spacer(modifier = Modifier.height(4.dp))
                         Text("Categories", style = MaterialTheme.typography.labelSmall, color = Color(0xFF90909A), fontWeight = FontWeight.Bold, fontSize = 10.sp)
                     }
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.clickable { onNavigateToSettings() }.padding(8.dp)
-                    ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.clickable { onNavigateToSettings() }.padding(8.dp)) {
                         Icon(Icons.Default.Settings, contentDescription = "Settings", tint = Color(0xFF90909A), modifier = Modifier.size(20.dp))
                         Spacer(modifier = Modifier.height(4.dp))
                         Text("Settings", style = MaterialTheme.typography.labelSmall, color = Color(0xFF90909A), fontWeight = FontWeight.Bold, fontSize = 10.sp)
@@ -213,11 +163,7 @@ fun DashboardScreen(
                 val symbol = if (currency == "PKR") "₨" else currency
                 val dateStr = remember { SimpleDateFormat("dd MMM", Locale.getDefault()).format(Date()) }
                 val remaining = (monthlyBudget - monthTotal).coerceAtLeast(0.0)
-                Card(
-                    modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
-                    shape = RoundedCornerShape(28.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color(0xFFD0E4FF))
-                ) {
+                Card(modifier = Modifier.fillMaxWidth().padding(top = 4.dp), shape = RoundedCornerShape(28.dp), colors = CardDefaults.cardColors(containerColor = Color(0xFFD0E4FF))) {
                     Column(modifier = Modifier.padding(24.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                             Text("Today's Total Expense", color = Color(0xFF00315C).copy(alpha = 0.8f), style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium)
@@ -261,31 +207,25 @@ fun DashboardScreen(
             }
             item {
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    OutlinedTextField(
-                        value = searchQuery, onValueChange = { searchQuery = it },
-                        modifier = Modifier.fillMaxWidth().testTag("search_field"),
+                    OutlinedTextField(value = searchQuery, onValueChange = { searchQuery = it }, modifier = Modifier.fillMaxWidth().testTag("search_field"),
                         placeholder = { Text("Search transactions...", color = Color(0xFF90909A)) },
                         leadingIcon = { Icon(Icons.Default.Search, contentDescription = null, tint = Color(0xFF90909A)) },
                         trailingIcon = { if (searchQuery.isNotEmpty()) IconButton(onClick = { searchQuery = "" }) { Icon(Icons.Default.Clear, contentDescription = "Clear", tint = Color(0xFF90909A)) } },
                         colors = OutlinedTextFieldDefaults.colors(focusedContainerColor = Color(0xFF1D1E25), unfocusedContainerColor = Color(0xFF1D1E25), focusedBorderColor = Color(0xFF3F4759), unfocusedBorderColor = Color(0x333F4759), focusedTextColor = Color.White, unfocusedTextColor = Color.White),
-                        singleLine = true, shape = RoundedCornerShape(16.dp)
-                    )
+                        singleLine = true, shape = RoundedCornerShape(16.dp))
                     Row(modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         listOf("All", "Today", "Week", "Month", "Year").forEach { period ->
                             FilterChip(selected = selectedTimePeriod == period, onClick = { selectedTimePeriod = period }, label = { Text(period) },
-                                colors = FilterChipDefaults.filterChipColors(selectedContainerColor = Color(0xFF3F4759), selectedLabelColor = Color.White, containerColor = Color(0xFF1D1E25), labelColor = Color(0xFF90909A)),
-                                shape = RoundedCornerShape(12.dp))
+                                colors = FilterChipDefaults.filterChipColors(selectedContainerColor = Color(0xFF3F4759), selectedLabelColor = Color.White, containerColor = Color(0xFF1D1E25), labelColor = Color(0xFF90909A)), shape = RoundedCornerShape(12.dp))
                         }
                     }
                     Row(modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         FilterChip(selected = selectedCategoryId == null, onClick = { selectedCategoryId = null }, label = { Text("All Categories") },
-                            colors = FilterChipDefaults.filterChipColors(selectedContainerColor = Color(0xFF3F4759), selectedLabelColor = Color.White, containerColor = Color(0xFF1D1E25), labelColor = Color(0xFF90909A)),
-                            shape = RoundedCornerShape(12.dp))
+                            colors = FilterChipDefaults.filterChipColors(selectedContainerColor = Color(0xFF3F4759), selectedLabelColor = Color.White, containerColor = Color(0xFF1D1E25), labelColor = Color(0xFF90909A)), shape = RoundedCornerShape(12.dp))
                         categories.forEach { cat ->
                             FilterChip(selected = selectedCategoryId == cat.id, onClick = { selectedCategoryId = cat.id }, label = { Text(cat.name) },
                                 leadingIcon = { Icon(imageVector = CategoryIconHelper.getIconByName(cat.iconName), contentDescription = null, modifier = Modifier.size(16.dp), tint = CategoryIconHelper.getColorFromHex(cat.colorHex)) },
-                                colors = FilterChipDefaults.filterChipColors(selectedContainerColor = Color(0xFF3F4759), selectedLabelColor = Color.White, containerColor = Color(0xFF1D1E25), labelColor = Color(0xFF90909A)),
-                                shape = RoundedCornerShape(12.dp))
+                                colors = FilterChipDefaults.filterChipColors(selectedContainerColor = Color(0xFF3F4759), selectedLabelColor = Color.White, containerColor = Color(0xFF1D1E25), labelColor = Color(0xFF90909A)), shape = RoundedCornerShape(12.dp))
                         }
                     }
                 }
@@ -328,12 +268,60 @@ fun DashboardScreen(
     }
 }
 
+// ✅ UPDATED: Tap karne pe full photo dialog khulta hai
 @Composable
 fun TransactionItemRow(item: ExpenseWithCategory, currency: String, onEdit: () -> Unit, onDelete: () -> Unit) {
     val symbol = if (currency == "PKR") "₨" else currency
     val dateStr = remember(item.date) { SimpleDateFormat("dd MMM, yyyy - hh:mm a", Locale.getDefault()).format(Date(item.date)) }
+
+    // ✅ Photo dialog state
+    var showPhotoDialog by remember { mutableStateOf(false) }
+
+    // ✅ Full screen photo dialog
+    if (showPhotoDialog && item.receiptPhotoPath != null) {
+        Dialog(
+            onDismissRequest = { showPhotoDialog = false },
+            properties = DialogProperties(usePlatformDefaultWidth = false)
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black)
+                    .clickable { showPhotoDialog = false },
+                contentAlignment = Alignment.Center
+            ) {
+                AsyncImage(
+                    model = item.receiptPhotoPath,
+                    contentDescription = "Receipt",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    contentScale = ContentScale.Fit
+                )
+                // Close button
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(16.dp)
+                        .size(40.dp)
+                        .background(Color.White.copy(alpha = 0.2f), CircleShape)
+                        .clickable { showPhotoDialog = false },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(Icons.Default.Close, contentDescription = "Close", tint = Color.White)
+                }
+            }
+        }
+    }
+
     Card(
-        modifier = Modifier.fillMaxWidth().testTag("expense_item_${item.expenseId}"),
+        modifier = Modifier
+            .fillMaxWidth()
+            .testTag("expense_item_${item.expenseId}")
+            // ✅ Tap karne pe photo khule (sirf agar photo ho)
+            .clickable(enabled = item.receiptPhotoPath != null) {
+                showPhotoDialog = true
+            },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFF1D1E25)),
         border = BorderStroke(1.dp, Color(0x1AFFFFFF))
@@ -346,6 +334,10 @@ fun TransactionItemRow(item: ExpenseWithCategory, currency: String, onEdit: () -
                 Text(item.categoryName, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold, color = Color.White, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 if (item.notes.isNotEmpty()) Text(item.notes, style = MaterialTheme.typography.bodyMedium, color = Color(0xFF90909A), maxLines = 1, overflow = TextOverflow.Ellipsis)
                 Text(dateStr, style = MaterialTheme.typography.bodySmall, color = Color(0xFF90909A))
+                // ✅ Photo indicator
+                if (item.receiptPhotoPath != null) {
+                    Text("📷 Tap to view receipt", style = MaterialTheme.typography.bodySmall, color = Color(0xFF90909A))
+                }
             }
             Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text("-$symbol ${String.format("%,.0f", item.amount)}", style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold, color = Color(0xFFF2B8B5))
